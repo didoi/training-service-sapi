@@ -1,0 +1,6 @@
+assessment:
+  port: "443"
+  host: "caliber2-mock.revaturelabs.com"
+  basepath: "/mock"
+  path: "/evaluation/assessments"
+  protocol: "HTTPS"

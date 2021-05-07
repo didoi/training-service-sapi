@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+	<flow name="get-assessment" doc:id="59a36bcd-240c-4b40-96f0-2479e69e88f6" >
+		<http:request method="GET" doc:name="GET /assessment" doc:id="c4faedfa-8467-4ae4-b220-419d43851914" path="${assessment.path}" config-ref="assessment_HTTP_Request_configuration">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"batchId" : vars.batchId,
+	"week" : vars.week
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="2b9f923d-d572-4536-b0e6-c0330a0c9d86" />
+	</flow>
+</mule>

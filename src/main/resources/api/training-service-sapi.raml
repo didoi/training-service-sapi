@@ -1,0 +1,118 @@
+#%RAML 1.0
+title: Training Service sAPI
+
+types:
+  Notes: !include types/Notes.raml
+  Category: !include types/Category.raml
+  Assessment: !include types/Assessment.raml
+  Trainer: !include /types/Trainer.raml
+
+/training:
+  get:
+    queryParameters:
+      email:
+        required: true
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            type: array
+            examples:
+              output: !include /examples/BatchIdExample.raml
+
+  /{trainerEmail}:
+    uriParameters:
+      trainerEmail: 
+        type: string
+        required: true
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Trainer
+              examples:
+                output: !include /examples/TrainerExample.raml
+
+  /batch:
+    get:
+      queryParameters:
+        batchId:
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            application/json:
+              examples:
+                output: !include /examples/BatchExample.raml
+
+/notes/{batchId}:
+  uriParameters:
+    batchId: string
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            items:
+              type: Notes
+              examples:
+                output: !include /examples/NoteExample.raml
+
+/category:
+  get:
+    queryParameters:
+      batchId:
+        required: true
+        type: string
+      week: 
+        required: true
+        type: integer
+    responses:
+      200:
+        body:
+          application/json:
+            items:
+              type: Category
+              examples:
+                output: !include /examples/CategoryExample.raml
+
+/assessment:
+  get:
+    queryParameters: 
+      batchId:
+        required: true
+        type: string
+      week:
+        required: true
+        type: integer
+    responses: 
+      200:
+        body:
+          application/json:
+            items: 
+              type: Assessment[]
+              examples:
+                output: !include /examples/AssessmentExample.raml
+
+  /average:
+    get:
+      queryParameters:
+        assessmentId: 
+          type: integer
+          required: false
+        batchId:
+          type: string
+          required: false
+        week:
+          type: integer
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: number
+              examples:
+                message: 76.019192
