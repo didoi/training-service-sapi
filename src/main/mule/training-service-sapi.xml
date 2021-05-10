@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <http:listener-config name="training-service-sapi-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
@@ -130,129 +131,35 @@ output application/json
 		<logger level="INFO" message="get:\assessment:training-service-sapi-config" />
     </flow>
     <flow name="get:\assessment\average:training-service-sapi-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-76.019192]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<set-variable value="#[attributes.queryParams.batchId]" doc:name="batchId" doc:id="3abb497b-fcea-41f3-966a-87afeecc362b" variableName="batchId"/>
+		<set-variable value="#[attributes.queryParams.week]" doc:name="week" doc:id="f9ca7215-2a84-4efd-b4cb-8a1034688ac1" variableName="week"/>
+		<flow-ref doc:name="get-average" doc:id="5e44859d-eccb-4271-8f6a-04d29d820d96" name="get-average"/>
+		<logger level="INFO" doc:name="Logger" doc:id="eae042f6-bfa4-4ba1-af2a-635781e86bd9" />
     </flow>
     <flow name="get:\training\batch:training-service-sapi-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: 16,
-    batchId: "TR-1028",
-    name: "Mock Batch 16",
-    startDate: "2020-04-01",
-    endDate: "2020-06-10",
-    skill: "Java React",
-    location: "Reston",
-    "type": "Corporate",
-    goodGrade: 70,
-    passingGrade: 80,
-    employeeAssignments: {
-      role: "ROLE_LEAD_TRAINER",
-      employee: {
-        email: "mock1022.employee870e1a69-f385-4cdb-9c59-986de917eca4@mock.com",
-        firstName: "Mock 1022",
-        lastName: "Employee 1022"
-      },
-      deletedAt: null
-    }
-  }, 
-  {
-    associateAssignments: [
-      {
-        trainingStatus: "Training",
-        associate: {
-          email: "mock0.associate59e1088a-6e5d-4cb7-9d36-9463a2beb2bc@mock.com",
-          salesforceId: "SF-1250",
-          firstName: "Mock 0",
-          lastName: "Associate 0",
-          flag: null
-        },
-        startDate: "2020-06-10",
-        endDate: "2020-04-01",
-        active: true
-      }, 
-      {
-        trainingStatus: "Training",
-        associate: {
-          email: "mock10.associate6d293e73-1aec-48a5-a0ed-ed8829c9e7f3@mock.com",
-          salesforceId: "SF-1260",
-          firstName: "Mock 10",
-          lastName: "Associate 10",
-          flag: null
-        },
-        startDate: "2020-06-10",
-        endDate: "2020-04-01",
-        active: true
-      }
-    ],
-    currentWeek: 11
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <set-variable value="#[attributes.queryParams.batchId]" doc:name="Set Variable" doc:id="fa97e4c1-0775-4c9d-b75b-75b4d519bafa" variableName="batchId"/>
+		<flow-ref doc:name="Flow Reference" doc:id="a496c1b9-4bd5-4d44-bb40-aea00bc38a95" name="get-batch-info"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d45227ee-3d95-4a39-bcdb-8dd5542d03f9" />
     </flow>
     <flow name="get:\category:training-service-sapi-config">
-        <logger level="INFO" message="get:\category:training-service-sapi-config" />
+        <set-variable value="#[attributes.queryParams.batchId]" doc:name="batchId" doc:id="ecb5c077-c054-4656-b722-2bebefaaaa45" variableName="batchId"/>
+		<set-variable value="#[attributes.queryParams.week]" doc:name="week" doc:id="4e861a97-7dbf-47d6-90ee-87f076f08f2c" variableName="week"/>
+		<flow-ref doc:name="get-category" doc:id="ac8f2435-2488-4873-814b-a23ab93ebc42" name="get-category"/>
+		<logger level="INFO" message="get:\category:training-service-sapi-config" />
     </flow>
     <flow name="get:\notes\(batchId):training-service-sapi-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="batchId">attributes.uriParams.'batchId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
+        <set-variable value="#[attributes.uriParams.batchId]" doc:name="batchId" doc:id="ca95890f-5c44-4c4d-a5a1-54b326de7985" variableName="batchId"/>
+		<flow-ref doc:name="get-notes-by-batch-id" doc:id="cca3bfe0-114f-4f5a-86bd-e06f253681e5" name="get-notes-by-batch-id"/>
         <logger level="INFO" message="get:\notes\(batchId):training-service-sapi-config" />
     </flow>
     <flow name="get:\training:training-service-sapi-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    batchId: "TR-1028"
-  }, 
-  {
-    batchId: "TR-1004"
-  }, 
-  {
-    batchId: "TR-1032"
-  }, 
-  {
-    batchId: "TR-1003"
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <set-variable value="#[attributes.queryParams.email]" doc:name="Set Variable" doc:id="bb210633-1e6d-494a-a15f-13a3ed829b4b" variableName="trainerEmail"/>
+		<flow-ref doc:name="Flow Reference" doc:id="720cc91c-dff7-4359-a8c0-312d98f02cf9" name="get-batch-ids"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d58a7ad7-bacb-449a-b97b-f1fccca9d2ee" />
     </flow>
     <flow name="get:\training\(trainerEmail):training-service-sapi-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="trainerEmail">attributes.uriParams.'trainerEmail'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  email: "mock1022.employee870e1a69-f385-4cdb-9c59-986de917eca4@mock.com",
-  firstName: "Mock 1022",
-  lastName: "Employee 1022"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <set-variable value="#[attributes.uriParams.trainerEmail]" doc:name="Set Variable" doc:id="f7c9e751-0841-41da-961b-980f46120f45" variableName="trainerEmail"/>
+		<flow-ref doc:name="Flow Reference" doc:id="a2a6f129-42aa-4202-9179-6a140afa21ee" name="get-trainer-info"/>
+		<logger level="INFO" doc:name="Logger" doc:id="f203137d-03d6-47c2-a813-41c9596313e1" />
     </flow>
 </mule>
